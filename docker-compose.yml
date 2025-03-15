@@ -1,4 +1,8 @@
-version: "3"
+networks:
+  default:
+    external: true
+    name: external-network
+    
 services:
   jellyfin:
     image: jellyfin/jellyfin
@@ -8,10 +12,10 @@ services:
       - PGID=1000
       - TZ=Asia/Kolkata
     volumes:
-      - ./jellyfin_config:/config
-      - /media/tvshows:/data/tvshows
-      - /media/movies:/data/movies
-      - /media/anime:/data/anime
+      - ./jellyfin/config:/config
+      - ./tvshows:/data/tvshows
+      - ./movies:/data/movies
+      - ./anime:/data/anime
     ports:
       - 8096:8096
     restart: unless-stopped
@@ -25,9 +29,9 @@ services:
       - TZ=Asia/Kolkata
     volumes:
       - ./sonarr_config:/config
-      - /media/anime:/anime
-      - /media/tvshows:/tvshows
-      - /media/transmission/downloads/complete:/downloads/complete
+      - ./anime:/anime
+      - ./tvshows:/tvshows
+      - ./transmission/downloads/complete:/downloads/complete
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -41,8 +45,8 @@ services:
       - TZ=Asia/Kolkata
     volumes:
       - ./radarr_config:/config
-      - /media/transmission/downloads/complete:/downloads/complete
-      - /media/movies:/movies
+      - ./transmission/downloads/complete:/downloads/complete
+      - ./movies:/movies
     ports:
       - 7878:7878
     restart: unless-stopped
@@ -56,9 +60,9 @@ services:
       - TZ=Asia/Kolkata
     volumes:
       - ./bazarr_config:/config
-      - /media/movies:/movies #optional
-      - /media/tvshows:/tvshows #optional
-      - /media/anime:/anime
+      - ./movies:/movies #optional
+      - ./tvshows:/tvshows #optional
+      - ./anime:/anime
     ports:
       - 6767:6767
     restart: unless-stopped
@@ -74,7 +78,7 @@ services:
     ports:
       - 5055:5055
     volumes:
-      - ./jellyseerr_config:/app/config
+      - ./jellyseerr/config:/app/config
     restart: unless-stopped
     depends_on:
       - radarr
@@ -90,8 +94,8 @@ services:
       - TZ=Asia/Kolkata
       - AUTO_UPDATE=true #optional
     volumes:
-      - ./jackett:/config
-      - /media/jackett/downloads:/downloads
+      - ./jackett/config:/config
+      - ./jackett/downloads:/downloads
     ports:
       - 9117:9117
     restart: unless-stopped
@@ -105,7 +109,7 @@ services:
       - TZ=Asia/Kolkata
     volumes:
       - ./transmission:/config
-      - /media/transmission/downloads:/downloads
+      - ./transmission/downloads:/downloads
     ports:
       - 9091:9091
       - 51413:51413
