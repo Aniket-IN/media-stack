@@ -7,6 +7,7 @@ services:
   jellyfin:
     image: jellyfin/jellyfin
     container_name: jellyfin
+    user: '1000'
     environment:
       - PUID=1000
       - PGID=1000
@@ -23,6 +24,7 @@ services:
   sonarr:
     image: linuxserver/sonarr
     container_name: sonarr
+    user: '1000'
     environment:
       - PUID=1000
       - PGID=1000
@@ -39,6 +41,7 @@ services:
   radarr:
     image: linuxserver/radarr
     container_name: radarr
+    user: '1000'
     environment:
       - PUID=1000
       - PGID=1000
@@ -54,6 +57,7 @@ services:
   bazarr:
     image: linuxserver/bazarr
     container_name: bazarr
+    user: '1000'
     environment:
       - PUID=1000
       - PGID=1000
@@ -68,8 +72,9 @@ services:
     restart: unless-stopped
 
   jellyseerr:
-    image: fallenbagel/jellyseerr:develop
+    image: fallenbagel/jellyseerr
     container_name: jellyseerr
+    user: '1000'
     environment:
       - PUID=1000
       - PGID=1000
@@ -88,6 +93,7 @@ services:
   jackett:
     image: linuxserver/jackett
     container_name: jackett
+    user: '1000'
     environment:
       - PUID=1000
       - PGID=1000
@@ -103,6 +109,7 @@ services:
   transmission:
     image: linuxserver/transmission
     container_name: transmission
+    user: '1000'
     environment:
       - PUID=1000
       - PGID=1000
@@ -115,3 +122,20 @@ services:
       - 51413:51413
       - 51413:51413/udp
     restart: unless-stopped
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - WEBUI_PORT=8080
+      - TORRENTING_PORT=6881
+    volumes:
+      - ./qbittorrent/config:/config
+      - ./qbittorrent/downloads:/downloads #optional
+    ports:
+      - 8080:8080
+      - 6881:6881
+      - 6881:6881/udp
+    restart: always
